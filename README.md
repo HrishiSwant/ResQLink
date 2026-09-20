@@ -16,7 +16,9 @@ Smart Emergency Resource Coordination System using FastAPI and MongoDB Atlas.
 
 Runs on:
 
-http://127.0.0.1:8000
+Service 1 : http://127.0.0.1:8000
+&
+Service 2 : http://127.0.0.1:8001
 
 ### Resource Service
 - FastAPI
