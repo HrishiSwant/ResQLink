@@ -46,3 +46,23 @@ Create and activate a virtual environment:
 
 ```powershell
 python -m venv venv
+```
+### From Creator 
+
+after downloading the zip file Extrct it in your system open that ResQlink named folder in vs code after installing first step you have to do is in terminal run
+python -m venv venv
+then 
+.\venv\Scripts\Activate.ps1 ( ask gpt if any error occur)
+👉only if it dosent work 
+If PowerShell blocks activation
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser then .\venv\Scripts\Activate.ps1
+
+after that : python -m pip install -r requirements.txt
+
+create .env named file in your root 
+
+everything is setup now 
+
+cd incident-service
+uvicorn app.main:app --reload --port 8000
+then : http://127.0.0.1:8000/docs
