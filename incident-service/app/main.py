@@ -1,52 +1,59 @@
-from fastapi import FastAPI
-from slowapi import _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
+import os
 
-from .database import client
-from .rate_limit import limiter
-from .routers.auth import router as auth_router
-from .routers.incidents import router as incident_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.database import users_collection
+from app.routers import auth, incidents
 
 
 app = FastAPI(
-    title="ResQLink - Incident Service",
-    description="Incident management microservice",
-    version="1.0.0"
+    title="ResQLink Incident Service",
+    version="1.0.0",
 )
 
-app.state.limiter = limiter
 
-app.add_exception_handler(
-    RateLimitExceeded,
-    _rate_limit_exceeded_handler
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:5173",
 )
 
-app.include_router(auth_router)
-app.include_router(incident_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        FRONTEND_URL,
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/", tags=["Health"])
+app.include_router(auth.router)
+app.include_router(incidents.router)
+
+
+@app.get("/")
 def root():
     return {
-        "service": "Incident Service",
-        "status": "running"
+        "service": "ResQLink Incident Service",
+        "status": "running",
     }
 
 
-@app.get("/health", tags=["Health"])
+@app.get("/health")
 def health():
     try:
-        client.admin.command("ping")
+        users_collection.database.command("ping")
 
         return {
-            "service": "Incident Service",
             "status": "healthy",
-            "database": "connected"
+            "service": "incident-service",
         }
 
     except Exception:
         return {
-            "service": "Incident Service",
             "status": "unhealthy",
-            "database": "disconnected"
+            "service": "incident-service",
         }
