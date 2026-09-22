@@ -1,3 +1,5 @@
+[![ResQLink CI](https://github.com/HrishiSwant/ResQLink/actions/workflows/ci.yml/badge.svg)](https://github.com/HrishiSwant/ResQLink/actions/workflows/ci.yml)
+
 # ResQLink Microservices
 
 Smart Emergency Resource Coordination System using FastAPI and MongoDB Atlas.
