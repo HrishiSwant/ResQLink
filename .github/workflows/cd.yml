@@ -1,0 +1,35 @@
+name: ResQLink CD
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  deploy:
+    name: Continuous Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: CD Status
+        run: |
+          echo "================================="
+          echo "ResQLink Continuous Deployment"
+          echo "================================="
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Deployment pipeline triggered successfully."
+
+      - name: Deployment Information
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "Environment: PRODUCTION"
+            echo "Production deployment triggered."
+          else
+            echo "Environment: DEVELOPMENT"
+            echo "Development deployment triggered."
+          fi
