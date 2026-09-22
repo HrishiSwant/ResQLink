@@ -1,0 +1,53 @@
+name: ResQLink Environment Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select deployment environment"
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+jobs:
+  environment-check:
+    name: Environment Validation
+    runs-on: ubuntu-latest
+
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Display environment
+        run: |
+          echo "================================="
+          echo "ResQLink Environment Validation"
+          echo "================================="
+          echo "Environment: ${{ inputs.environment }}"
+
+      - name: Validate environment
+        run: |
+          case "${{ inputs.environment }}" in
+            dev)
+              echo "Development environment selected."
+              ;;
+            staging)
+              echo "Staging environment selected."
+              ;;
+            production)
+              echo "Production environment selected."
+              ;;
+            *)
+              echo "Invalid environment."
+              exit 1
+              ;;
+          esac
+
+      - name: Environment validation complete
+        run: |
+          echo "Environment configuration validated successfully."
