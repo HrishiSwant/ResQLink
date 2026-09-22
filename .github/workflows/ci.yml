@@ -37,7 +37,7 @@ jobs:
           python -m compileall app
 
       - name: Verify Resource Service
-        working-directory: resource-service
+        working-directory: resource-serivice
         run: |
           python -m compileall app
 
