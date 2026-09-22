@@ -1,50 +1,48 @@
-from fastapi import FastAPI
-from slowapi import _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
+import os
 
-from .database import client
-from .rate_limit import limiter
-from .routers.resources import router as resource_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.routers import resources
 
 
 app = FastAPI(
-    title="ResQLink - Resource Service",
-    description="Emergency resource management microservice",
-    version="1.0.0"
+    title="ResQLink Resource Service",
+    version="1.0.0",
 )
 
-app.state.limiter = limiter
 
-app.add_exception_handler(
-    RateLimitExceeded,
-    _rate_limit_exceeded_handler
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:5173",
 )
 
-app.include_router(resource_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        FRONTEND_URL,
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/", tags=["Health"])
+app.include_router(resources.router)
+
+
+@app.get("/")
 def root():
     return {
-        "service": "Resource Service",
-        "status": "running"
+        "service": "ResQLink Resource Service",
+        "status": "running",
     }
 
 
-@app.get("/health", tags=["Health"])
+@app.get("/health")
 def health():
-    try:
-        client.admin.command("ping")
-
-        return {
-            "service": "Resource Service",
-            "status": "healthy",
-            "database": "connected"
-        }
-
-    except Exception:
-        return {
-            "service": "Resource Service",
-            "status": "unhealthy",
-            "database": "disconnected"
-        }
+    return {
+        "status": "healthy",
+        "service": "resource-service",
+    }
