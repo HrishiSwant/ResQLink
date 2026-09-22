@@ -14,7 +14,7 @@ def test_incident_service_syntax():
 
 
 def test_resource_service_syntax():
-    main_file = ROOT / "resource-service" / "app" / "main.py"
+    main_file = ROOT / "resource-serivice" / "app" / "main.py"
 
     source = main_file.read_text(encoding="utf-8")
 
@@ -29,7 +29,7 @@ def test_incident_service_structure():
 
 
 def test_resource_service_structure():
-    app_directory = ROOT / "resource-service" / "app"
+    app_directory = ROOT / "resource-serivice" / "app"
 
     assert app_directory.exists()
     assert (app_directory / "main.py").exists()
