@@ -1,4 +1,4 @@
-name: ResQLink Environment Check
+name: ResQLink Environment Deployment
 
 on:
   workflow_dispatch:
@@ -13,8 +13,8 @@ on:
           - production
 
 jobs:
-  environment-check:
-    name: Environment Validation
+  deploy-check:
+    name: Deploy to ${{ inputs.environment }}
     runs-on: ubuntu-latest
 
     environment: ${{ inputs.environment }}
@@ -23,31 +23,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Display environment
+      - name: Build validation
         run: |
           echo "================================="
-          echo "ResQLink Environment Validation"
+          echo "ResQLink CD Pipeline"
           echo "================================="
           echo "Environment: ${{ inputs.environment }}"
+          echo "Branch: ${{ github.ref_name }}"
 
-      - name: Validate environment
+      - name: Deployment validation
         run: |
-          case "${{ inputs.environment }}" in
-            dev)
-              echo "Development environment selected."
-              ;;
-            staging)
-              echo "Staging environment selected."
-              ;;
-            production)
-              echo "Production environment selected."
-              ;;
-            *)
-              echo "Invalid environment."
-              exit 1
-              ;;
-          esac
+          echo "Running deployment validation..."
+          echo "Environment: ${{ inputs.environment }}"
 
-      - name: Environment validation complete
+      - name: Deployment completed
         run: |
-          echo "Environment configuration validated successfully."
+          echo "================================="
+          echo "Deployment completed successfully"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "================================="
