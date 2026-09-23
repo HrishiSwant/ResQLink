@@ -68,3 +68,6 @@ everything is setup now
 cd incident-service
 uvicorn app.main:app --reload --port 8000
 then : http://127.0.0.1:8000/docs
+
+
+DevOps CI/CD workflow verified.
